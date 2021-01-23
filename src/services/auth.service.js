@@ -24,7 +24,9 @@ const getUser = async () => {
     }
 }
 
-export {
+const authService = {
     saveUser,
     getUser
 }
+
+export default authService

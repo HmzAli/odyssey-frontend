@@ -1,3 +1,5 @@
-export default {
-    baseAPI: 'http://localhost:3000'
+const baseAPI = 'http://localhost:3000'
+
+export {
+    baseAPI
 }

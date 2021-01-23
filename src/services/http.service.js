@@ -21,8 +21,9 @@ const get = (url) => axios.get(`${baseAPI}${url}`, getHeader())
 const post = (url, data) => axios.post(`${baseAPI}${url}`, data, getHeader())
 const _delete = (url) => axios.delete(`${baseAPI}${url}`, getHeader())
 
-export default {
+const httpService = {
     get,
     post,
     _delete
 }
+export default httpService

@@ -1,6 +1,6 @@
 import httpService from './http.service'
 import authService from './auth.service'
-import User from './model/User.model'
+import User from '../models/User.model'
 
 /** 
  * Handles all user(s) operations
@@ -8,7 +8,7 @@ import User from './model/User.model'
 
 const login = async (username, password) => httpService.post('/api/login', { username, password })
     .then(async userResponse => {
-        if (!user) {
+        if (!userResponse) {
             throw new Error('Failed to login. Unable to fetch user info')
         }
         if (!userResponse.token) {
@@ -39,15 +39,23 @@ const add = async (userData) => httpService.post('/api/users', userData)
         throw new Error(error)
     })
 
-const _delete = async id => httpService._delete(`/api/users/${id}`)
-    .catch(({error}) => {
-        throw new Error(error)
-    })
+const _delete = async id => {
+    if (authService.getUser().role !== 'admin') {
+        throw new Error('Only an admin can perform this action')
+    }
 
-export default {
+    return httpService._delete(`/api/users/${id}`)
+        .catch(({error}) => {
+            throw new Error(error)
+        })
+}
+
+const usersService = {
     login,
     getAll,
     getOne,
     add,
     _delete
 }
+
+export default usersService
