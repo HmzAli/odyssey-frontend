@@ -1,12 +1,15 @@
 import {React, Component} from 'react'
 
+import Alert from './Alert'
+
 class Login extends Component {
     constructor() {
         super()
 
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            alert: null
         }
     }
 
@@ -14,31 +17,35 @@ class Login extends Component {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const name = target.name;
-    
+
         this.setState({
           [name]: value
         });
     }
 
     handleSubmit = (event) => {
-
+        event.preventDefault();
     }
 
     render() {
         return (
-            <div className="login-wrapper">
-                <form onSubmit={this.handleSubmit}>
+            <div className="form-wrapper">
+                <h4 className="text-center mb-4"> Login </h4>
+
+                <form method="post" onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label className="input-label"> Username </label>
-                        <input type="text" name="username" onChange={this.handleChange}></input>
+                        <input className="form-control" type="text" name="username" onChange={this.handleChange}></input>
                     </div>
 
                     <div className="form-group">
                         <label className="input-label"> Password </label>
-                        <input type="text" name="password" onChange={this.handleChange}></input>
+                        <input className="form-control"type="password" name="password" onChange={this.handleChange}></input>
                     </div>
 
-                    <button type="submit"> Login </button>
+                    <button className="btn btn-primary btn-block" type="submit"> Login </button>
+
+                    {!!this.state.alert ? <Alert type={this.state.alert.type} message={this.state.alert.message} /> : ''}
                 </form>
             </div>
         )
