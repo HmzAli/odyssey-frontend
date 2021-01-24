@@ -6,32 +6,19 @@ import authService from './auth.service'
  * Wrapper for http implementation allowing authenticated http calls
  */
 
-const authToken = authService.getUser().authToken
-if (authToken) {
-    axios.defaults.headers.common['Authorization'] = `bearer ${authToken}`
+const user = authService.getUser()
+if (user && user.authToken) {
+    axios.defaults.headers.common['Authorization'] = `bearer ${user.authToken}`
 }
 
-const getHeader = () => {
-    const user = authService.getUser()
-
-    if (!!user && user.authToken) {
-        return {
-            'Authorization': `bearer ${user.authToken}`
-        }
-    }
-
-    return {}
-}
-
-const get = (url) => {
-    return axios.get(`${baseAPI}${url}`)
-}
-const post = (url, data) => axios.post(`${baseAPI}${url}`, data, getHeader())
-const _delete = (url) => axios.delete(`${baseAPI}${url}`, getHeader())
+const get = (url) => axios.get(`${baseAPI}${url}`)
+const post = (url, data) => axios.post(`${baseAPI}${url}`, data)
+const _delete = (url) => axios.delete(`${baseAPI}${url}`)
 
 const httpService = {
     get,
     post,
     _delete
 }
+
 export default httpService

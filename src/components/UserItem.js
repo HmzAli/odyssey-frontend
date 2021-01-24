@@ -7,6 +7,11 @@ class UserItem extends Component {
         super()
     }
 
+    handleDelete = event => {
+        const id = Number(event.target.value)
+        this.props.deleteUser(id)
+    }
+
     get canDelete() {
         const user = this.context
         return user.id !== this.props.user.id && user.role === 'admin'
@@ -25,7 +30,7 @@ class UserItem extends Component {
                 <div className="col-sm-2"> {user.username} </div>
                 <div className="col-sm-2"> {user.role} </div>
      
-                <div className="col-sm-2"> <button className="btn btn-danger" disabled={!this.canDelete}> Delete</button> </div>
+                <div className="col-sm-2"> <button className="btn btn-danger" value={user.id} onClick={this.handleDelete} disabled={!this.canDelete}> Delete</button> </div>
             </li>
         )
     }

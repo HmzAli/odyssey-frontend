@@ -36,8 +36,8 @@ const getOne = async id => httpService.get(`/api/users/${id}`)
     })
 
 const add = async (userData) => httpService.post('/api/users', userData)
-    .catch(({error}) => {
-        throw new Error(error)
+    .catch(({response}) => {
+        throw new Error(response.data.error)
     })
 
 const _delete = async id => {

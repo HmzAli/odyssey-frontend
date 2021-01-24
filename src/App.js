@@ -16,6 +16,7 @@ import Dashboard from './components/Dashboard'
 import About from './components/About'
 import Header from './components/Header'
 import UserList from './components/UserList'
+import AddUser from './components/AddUser'
 
 import NotFound from "./components/NotFound"
 import Alert from './components/Alert'
@@ -31,10 +32,6 @@ class App extends Component {
         }
     }
 
-    get loggedIn() {
-        return !!this.state.user
-    }
-
     componentDidMount() {
         const user = authService.getUser()
 
@@ -42,6 +39,10 @@ class App extends Component {
             this.setState({user})
             this.getUsers()
         }
+    }
+
+    get loggedIn() {
+        return !!this.state.user
     }
   
     login = (username, password) => {
@@ -67,16 +68,25 @@ class App extends Component {
             .catch(this.handleError)
     }
 
-    deleteUser(id) {
-        userService._delete(id)
-            .then(() => this.handleSuccess('User deleted'))
+    addUser = (userData) => {
+        userService.add(userData)
+            .then(() => {
+                this.getUsers()
+                this.handleSuccess('User added')
+            })
             .catch(this.handleError)
     }
 
-    /**
-     * Manages access to pages
-     * @param {*} path 
-     */
+    deleteUser(id) {
+        if (!window.confirm('Are you sure you wanna delete this user?')) {
+            return;
+        }
+    
+        userService._delete(id)
+            .then(() => { console.log(this);return this.handleSuccess('User deleted')})
+            .catch(this.handleError)
+    }
+
     getRoute(path) {
         if (!this.loggedIn) {
             return <Redirect to="/login" />
@@ -87,11 +97,15 @@ class App extends Component {
         }
 
         if (path === '/users') {
-            return <UserList users={this.state.users} />
+            return <UserList users={this.state.users} deleteUser={this.deleteUser}/>
         }
 
         if (path === '/about') {
             return <About />
+        }
+
+        if (path === '/add-user') {
+            return <AddUser addUser={this.addUser} handleError={this.handleError}/>
         }
 
         if (path === '/login') {
@@ -117,7 +131,7 @@ class App extends Component {
         })
     }
 
-    handleSuccess(message) {
+    handleSuccess = message => {
         this.setState({
             alert: {
                 type: 'success',
@@ -138,6 +152,7 @@ class App extends Component {
                             <Route exact path="/dashboard" render={() => this.getRoute('/dashboard')} />
                             <Route exact path="/users" render={() => this.getRoute('/users')} />
                             <Route exact path="/about" render={() => this.getRoute('/about')} />
+                            <Route exact path="/add-user" render={() => this.getRoute('/add-user')} />
                             <Route exact path="/login" render={() => this.loggedIn ? <Redirect to="/dashboard"/> : <Login login={this.login} handleError={this.handleError}/> } />
                             <Route exact path="/logout" render={() => this.getRoute('/logout')} />
                             <Route component={NotFound}></Route>
