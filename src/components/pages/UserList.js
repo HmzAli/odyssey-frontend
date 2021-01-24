@@ -1,7 +1,7 @@
 import { React } from 'react'
 import { NavLink } from 'react-router-dom';
 
-import UserItem from './UserItem'
+import UserItem from '../UserItem'
 
 const UserList = (props) => (
     <div className="users-wrapper">

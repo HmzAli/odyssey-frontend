@@ -16,17 +16,9 @@ const saveUser = (user) => {
     return lockr.set('user', user)
 }
 
-const getUser = () => {
-    const user = lockr.get('user')
+const getUser = () => lockr.get('user') || null
 
-    if (!!user) {
-        return user
-    }
-}
-
-const clearUser = () => {
-    lockr.rm('user')
-}
+const clearUser = () => lockr.rm('user')
 
 const authService = {
     saveUser,

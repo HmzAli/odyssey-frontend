@@ -9,16 +9,16 @@ import {
 
 import UserContext from './user-context'
 import userService from './services/users.service'
-import authService from "./services/auth.service"
+import authService from './services/auth.service'
 
-import Login from './components/Login'
-import Dashboard from './components/Dashboard'
-import About from './components/About'
+import Login from './components/pages/Login'
+import Dashboard from './components/pages/Dashboard'
+import About from './components/pages/About'
+import UserList from './components/pages/UserList'
+import AddUser from './components/pages/AddUser'
+import NotFound from './components/pages/NotFound'
+
 import Header from './components/Header'
-import UserList from './components/UserList'
-import AddUser from './components/AddUser'
-
-import NotFound from "./components/NotFound"
 import Alert from './components/Alert'
 
 class App extends Component {
@@ -46,20 +46,18 @@ class App extends Component {
     }
   
     login = (username, password) => {
-        this.setState({user: null})
         userService.login(username, password)
             .then(user => {
                 this.setState({user})
                 authService.saveUser(user)
+                this.getUsers()
             })
             .catch(this.handleError)
-
-        this.getUsers()
     }
 
     logout = () => {
         authService.clearUser()
-        this.setState({user: null, users: []})
+        this.setState({user: null, users: [], alert: null})
     }
 
     getUsers() {
@@ -69,9 +67,9 @@ class App extends Component {
     }
 
     addUser = (userData) => {
-        userService.add(userData)
+        return userService.add(userData)
             .then(() => {
-                this.handleSuccess('User added')
+                this.handleSuccess('User added successfully')
                 this.getUsers()
             })
             .catch(this.handleError)
@@ -84,7 +82,7 @@ class App extends Component {
 
         userService._delete(id)
             .then(() => {
-                this.handleSuccess('User deleted')
+                this.handleSuccess('User deleted successfully')
                 this.getUsers()
             })
             .catch(this.handleError)
@@ -108,7 +106,7 @@ class App extends Component {
         }
 
         if (path === '/add-user') {
-            return <AddUser addUser={this.addUser} handleError={this.handleError}/>
+            return <AddUser addUser={this.addUser} handleError={this.handleError} />
         }
 
         if (path === '/login') {

@@ -7,6 +7,7 @@ import authService from './auth.service'
  */
 
 const user = authService.getUser()
+
 if (user && user.authToken) {
     axios.defaults.headers.common['Authorization'] = `bearer ${user.authToken}`
 }

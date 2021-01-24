@@ -1,7 +1,7 @@
 import { React, Component } from 'react'
 import { NavLink } from 'react-router-dom';
 
-import UserContext from '../user-context'
+import UserContext from '../../user-context'
 
 class Dashboard extends Component {
     constructor() {
