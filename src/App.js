@@ -130,6 +130,8 @@ class App extends Component {
                 message: error.message
             }
         })
+
+        setTimeout(() => this.setState({alert: null}), 4000)
     }
 
     handleSuccess = message => {
@@ -139,6 +141,8 @@ class App extends Component {
                 message: message
             }
         })
+
+        setTimeout(() => this.setState({alert: null}), 4000)
     }
 
     render() {
