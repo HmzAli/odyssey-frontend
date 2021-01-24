@@ -71,19 +71,22 @@ class App extends Component {
     addUser = (userData) => {
         userService.add(userData)
             .then(() => {
-                this.getUsers()
                 this.handleSuccess('User added')
+                this.getUsers()
             })
             .catch(this.handleError)
     }
 
-    deleteUser(id) {
+    deleteUser = (id) => {
         if (!window.confirm('Are you sure you wanna delete this user?')) {
             return;
         }
-    
+
         userService._delete(id)
-            .then(() => { console.log(this);return this.handleSuccess('User deleted')})
+            .then(() => {
+                this.handleSuccess('User deleted')
+                this.getUsers()
+            })
             .catch(this.handleError)
     }
 
