@@ -1,4 +1,4 @@
-import {React, Component} from 'react'
+import { React, Component } from 'react'
 
 import Alert from './Alert'
 
@@ -13,7 +13,7 @@ class Login extends Component {
         }
     }
 
-    handleChange = (event) => {
+    handleChange = event => {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const name = target.name;
@@ -23,8 +23,14 @@ class Login extends Component {
         });
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = event => {
         event.preventDefault();
+
+        if (!this.state.username || !this.state.password) {
+            return this.props.handleError(new Error('Username and password required'))
+        }
+
+        this.props.login(this.state.username, this.state.password)
     }
 
     render() {
@@ -44,9 +50,9 @@ class Login extends Component {
                     </div>
 
                     <button className="btn btn-primary btn-block" type="submit"> Login </button>
-
-                    {!!this.state.alert ? <Alert type={this.state.alert.type} message={this.state.alert.message} /> : ''}
                 </form>
+
+                {!!this.state.alert ? <Alert type={this.state.alert.type} message={this.state.alert.message} /> : ''}
             </div>
         )
     }

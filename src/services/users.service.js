@@ -7,24 +7,25 @@ import User from '../models/User.model'
  */
 
 const login = async (username, password) => httpService.post('/api/login', { username, password })
-    .then(async userResponse => {
-        if (!userResponse) {
+    .then(async ({data}) => {
+        if (!data) {
             throw new Error('Failed to login. Unable to fetch user info')
         }
-        if (!userResponse.token) {
+        if (!data.token) {
             throw new Error('Failed to login. No auth token found')
         }
-
-        const newUser = User.create(userResponse)
-        await authService.saveUser(newUser)
+    
+        let loggedInUser = User.create(data.user)
+        loggedInUser.authToken = data.token
+        return loggedInUser
     })
-    .catch(({error}) => {
-        throw new Error(error)
+    .catch(({response}) => {
+        throw new Error(response.data.error)
     })
 
 const getAll = async () => httpService.get('/api/users')
-    .then(usersResponse => usersResponse.map(User.create))
-    .catch(({error}) => {
+    .then(({data}) => data.map(User.create))
+    .catch((error) => {
         throw new Error(error)
     })
 

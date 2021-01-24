@@ -1,11 +1,11 @@
 export default class User {
-    constructor(id, name, username, email, role, authToken) {
+    constructor(id, name, username, email, role) {
         this.id = id
         this.name = name
         this.username = username
         this.email = email
         this.role = role
-        this.authToken = authToken
+        this.authToken = null
     }
 
     /**
@@ -14,14 +14,7 @@ export default class User {
      *  
      * @returns {User} a new User instance
      */
-    static create({id, name, username, email, role, token}) {
-        return new User({
-            id,
-            name,
-            username, 
-            email,
-            role,
-            authToken: token
-        })
+    static create({id, name, username, email, role}) {
+        return new User(id, name, username, email, role)
     }
 }

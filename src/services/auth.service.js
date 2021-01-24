@@ -4,29 +4,34 @@ import lockr from 'lockr'
  * Saves and fetches logged in user to/from local storage
  */
 
-const saveUser = async (user) => {
+const saveUser = (user) => {
     if (!user) {
         throw new Error('No user provided')
     }
 
-    if (!user.token) {
+    if (!user.authToken) {
         throw new Error('User has no auth token')
     }
 
     return lockr.set('user', user)
 }
 
-const getUser = async () => {
+const getUser = () => {
     const user = lockr.get('user')
 
-    if (!user) {
-        throw new Error('No logged in user found')
+    if (!!user) {
+        return user
     }
+}
+
+const clearUser = () => {
+    lockr.rm('user')
 }
 
 const authService = {
     saveUser,
-    getUser
+    getUser,
+    clearUser
 }
 
 export default authService
